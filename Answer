@@ -1,0 +1,61 @@
+
+
+#[CLAIMS ANALYTICS TRAINING]
+#A Beginner’s Guide to R 
+# Chapter 3
+#   - Exercise 1
+
+#Set Path
+setwd("C:/Users/Jeonghun/Desktop/Claim analytics training/data")
+
+
+#Open the Excel file BirdFlu.xls
+BF <- read.table(file = "BirdFlu.csv", header = TRUE, sep = ",")
+
+names(BF)
+std(BF)
+
+BF[,"Cases2003"]
+BF$Cases2003
+BF[,1]
+
+#What is the total number of bird flu cases in 2003 and in 2005? 
+sum(BF[,"Cases2003"])
+sum(BF[,"Cases2005"])
+
+
+#Which country has had the most cases? 
+BF$TotalCases <- BF$Cases2003 + BF$Cases2004 + BF$Cases2005 + BF$Cases2006 + BF$Cases2007 + BF$Cases2008
+BF
+
+#Which country has had the least bird flu deaths?
+BF$TotalDeaths <- BF$Deaths2003 + BF$Deaths2004 + BF$Deaths2005 + BF$Deaths2006 + BF$Deaths2007 + BF$Cases2008
+BF
+
+
+#Using methods from Chapter 2, what is the total number of bird flu cases per country? 
+#What is the total number of cases per year?
+#Making a data for analysis 
+BF <- read.table(file = "BirdFlu.csv", header = TRUE, sep = ",")
+
+Data4Analysis <- data.frame(CasesDeaths = as.vector(as.matrix(BF[,-1])),
+                            Country     = rep(BF[,1], ncol(BF)-1),
+                            Year        = rep(c(2003, 2003, 2004, 2004, 2005, 2005, 
+                                                2006, 2006, 2007, 2007, 2008, 2008), each = nrow(BF)),
+                            CD          = rep(c("Cases", "Deaths", "Cases", "Deaths",
+                                                "Cases", "Deaths", "Cases", "Deaths",
+                                                "Cases", "Deaths", "Cases", "Deaths"), each = nrow(BF)  ))
+
+head(Data4Analysis, 50)
+BF
+
+
+library(plyr)
+# what is the total number of bird flu cases per country? 
+ddply(Data4Analysis[Data4Analysis$CD == "Cases",] ,~Country, summarise, sum=sum(CasesDeaths))
+# What is the total number of cases per year?
+ddply(Data4Analysis[Data4Analysis$CD == "Cases",] ,~Year, summarise, sum=sum(CasesDeaths))
+
+
+
+ 
